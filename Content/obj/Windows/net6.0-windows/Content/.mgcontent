@@ -5,8 +5,10 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/Admin/Documents/GitHub/Pong/Content/Bolll_pong.png</File>
+    <File>C:/Users/Admin/Documents/GitHub/Pong/Content/Score.spritefont</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>
 </SourceFileCollection>
