@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SharpDX.X3DAudio;
@@ -15,7 +16,8 @@ public class Game1 : Game
 
     Rectangle paddleLeft = new Rectangle(10,200,20,100);
     Rectangle paddleRight = new Rectangle(770,200,20,100);
-    Rectangle Ball = new Rectangle(390,230,20,20);
+
+    boll boll;
 
     float velocityX = 1;
     float velocityY = 1;
@@ -43,6 +45,8 @@ public class Game1 : Game
         // TODO: use this.Content to load your game content here
         pixel = Content.Load<Texture2D>(assetName: "Bolll_pong");
         fontScore = Content.Load<SpriteFont>("Score");
+
+        boll = new boll(pixel);
     }
 
     protected override void Update(GameTime gameTime)
@@ -64,24 +68,18 @@ public class Game1 : Game
             paddleRight.Y+= 8;
         }
 
-        Ball.X += (int)velocityX;
-        Ball.Y += (int)velocityY;
-        if(Ball.Intersects(paddleRight) ||
-           Ball.Intersects(paddleLeft)){
-           velocityX *= -1.1f;
-           velocityY *= -1.1f;
+
+        boll.Update();
+        
+        if(boll.Rectangle.X <= 0){
+            boll.Reset();
+            scoreRightplayer++;
+        }
+        else if(boll.Rectangle.X + boll.Rectangle.Width >= 800){
+           boll.Reset();
+            scoreLeftplayer++;
         }
 
-        if(Ball.Y <= 0 || Ball.Y + Ball.Height >= 460){
-            velocityY *= -1;
-        }
-        
-        if(Ball.X <= 0 || Ball.X + Ball.Width >= 800){
-            Ball.X = 390;
-            Ball.Y = 230;
-            velocityX = 2;
-            velocityY = 2;
-        }
         
 
         // TODO: Add your update logic here
@@ -98,9 +96,9 @@ public class Game1 : Game
         _spriteBatch.DrawString(fontScore,scoreLeftplayer.ToString(),new Vector2(10,10),Color.Orange);
         _spriteBatch.DrawString(fontScore,scoreRightplayer.ToString(),new Vector2(730,10),Color.Orange);
 
-        _spriteBatch.Draw(pixel,paddleLeft,Color.Red);
-        _spriteBatch.Draw(pixel,paddleRight,Color.LimeGreen);
-        _spriteBatch.Draw(pixel,Ball,Color.LightYellow);
+        _spriteBatch.Draw(pixel,paddleLeft,Color.Green);
+        _spriteBatch.Draw(pixel,paddleRight,Color.Green);
+        boll.Draw(_spriteBatch);
         _spriteBatch.End();
 
         base.Draw(gameTime);
