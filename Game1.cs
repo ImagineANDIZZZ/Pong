@@ -14,8 +14,8 @@ public class Game1 : Game
     Texture2D pixel;
     SpriteFont fontScore;
 
-    Rectangle paddleLeft = new Rectangle(10,200,20,100);
-    Rectangle paddleRight = new Rectangle(770,200,20,100);
+    Paddle paddleLeft;
+    Paddle paddleRight;
 
     boll boll;
 
@@ -47,29 +47,23 @@ public class Game1 : Game
         fontScore = Content.Load<SpriteFont>("Score");
 
         boll = new boll(pixel);
+        paddleLeft = new Paddle(pixel, new Rectangle(10,200,20,100),Keys.W, Keys.S);
+        paddleRight = new Paddle(pixel, new Rectangle(770,200,20,100),Keys.Up,Keys.Down);
     }
 
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
-
-        KeyboardState kState = Keyboard.GetState();
-        if(kState.IsKeyDown(Keys.W) && paddleLeft.Y > 0){
-            paddleLeft.Y-= 8;
-        }
-        if(kState.IsKeyDown(Keys.S) && paddleLeft.Y + paddleLeft.Height < 480){
-            paddleLeft.Y+= 8;
-        }
-        if(kState.IsKeyDown(Keys.Up) && paddleRight.Y > 0){
-            paddleRight.Y-= 8;
-        }
-        if(kState.IsKeyDown(Keys.Down) && paddleRight.Y + paddleLeft.Height < 480){
-            paddleRight.Y+= 8;
-        }
-
+            Exit(); 
+        
+        paddleLeft.Update();
+        paddleRight.Update();
 
         boll.Update();
+        if(paddleLeft.Rectangle.Intersects(boll.Rectangle) ||
+        paddleRight.Rectangle.Intersects(boll.Rectangle)){
+            boll.Bounce();
+        }
         
         if(boll.Rectangle.X <= 0){
             boll.Reset();
@@ -95,9 +89,8 @@ public class Game1 : Game
         _spriteBatch.Begin();
         _spriteBatch.DrawString(fontScore,scoreLeftplayer.ToString(),new Vector2(10,10),Color.Orange);
         _spriteBatch.DrawString(fontScore,scoreRightplayer.ToString(),new Vector2(730,10),Color.Orange);
-
-        _spriteBatch.Draw(pixel,paddleLeft,Color.Green);
-        _spriteBatch.Draw(pixel,paddleRight,Color.Green);
+        paddleLeft.Draw(_spriteBatch);
+        paddleRight.Draw(_spriteBatch);
         boll.Draw(_spriteBatch);
         _spriteBatch.End();
 
