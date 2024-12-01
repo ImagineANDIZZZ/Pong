@@ -23,7 +23,7 @@ public class Game1 : Game
     float velocityY = 1;
 
     int scoreLeftplayer = 0;
-     int scoreRightplayer = 0;
+    int scoreRightplayer = 0;
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
